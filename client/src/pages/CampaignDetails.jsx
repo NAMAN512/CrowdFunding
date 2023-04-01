@@ -29,12 +29,14 @@ const CampaignDetails = () => {
   }, [contract, address])
 
   const handleDonate = async () => {
-    setIsLoading(true);
+    if (!address) alert('Connect Your Wallet')
+    else
+      setIsLoading(true);
 
-    await donate(state.pId, amount);
+      await donate(state.pId, amount);
 
-    navigate('/')
-    setIsLoading(false);
+      navigate('/')
+      setIsLoading(false);
   }
 
   return (
@@ -51,7 +53,7 @@ const CampaignDetails = () => {
         </div>
 
         <div className="flex md:w-[150px] w-full flex-wrap justify-between gap-[30px]">
-          <CountBox title="Days Left" value={remainingDays} />
+          <CountBox title="Days Left" value={remainingDays > 0 ? remainingDays : '0'} />
           <CountBox title={`Raised of ${state.target}`} value={state.amountCollected} />
           <CountBox title="Total Backers" value={donators.length} />
         </div>
@@ -118,13 +120,19 @@ const CampaignDetails = () => {
                 <h4 className="font-epilogue font-semibold text-[14px] leading-[22px] text-white">Back it because you believe in it.</h4>
                 <p className="mt-[20px] font-epilogue font-normal leading-[22px] text-[#808191]">Support the project for no reward, just because it speaks to you.</p>
               </div>
-
-              <CustomButton
-                btnType="button"
-                title="Fund Campaign"
-                styles="w-full bg-[#8c6dfd]"
-                handleClcik={handleDonate}
-              />
+              {remainingDays > 0 ? 
+                <CustomButton
+                  btnType="button"
+                  title='Fund Campaign'
+                  styles="w-full bg-[#8c6dfd]"
+                  handleClcik={amount > 0 ? handleDonate : '0'}
+                /> : 
+                <CustomButton
+                  btnType="button"
+                  title='Campaign Closed'
+                  styles="w-full bg-[#8b8896]"
+                />
+              }
             </div>
           </div>
         </div>
